@@ -34,7 +34,7 @@ public class Test {
 		int N = 7;
 		System.out.println("\nTest 2: attempt to find counterexample of star conjecture based on all non-isomorphic trees of " + N + " nodes\n");		
 		
-		String dir = "/Users/admin/eclipse-workspace/tinygarden/data/deg-7"
+		String dir = "C:/Users/manud/tinygarden/data/deg-7";
 		for(int i = 1; i <= 11; i++) {
 			String file = dir + "/A" + i + ".tree";
 			StarConjecture sh = new StarConjecture(i, StarConjecture.buildFromAdjMatrix(N, file));

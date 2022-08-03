@@ -1345,6 +1345,10 @@ public class BasicClasses extends BasicClasses_h
 		return index;
 	}
 
+	public int degree(int iV) {
+		return (0 <= iV && iV < _nV) ? _vertexEdges[iV].size() : -1;
+	}
+
 	public int[] getDegrees() {
 		int[] degrees = new int[_nV];
 		for (int i = 0; i < _nV; i++) {

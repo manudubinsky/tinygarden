@@ -1,3 +1,4 @@
+
 package edu.undav.research.tinygarden;
 
 import java.io.File;
@@ -7,7 +8,6 @@ import java.util.Scanner;
 import edu.undav.research.tinygarden.BasicClasses.Graph;
 import edu.undav.research.tinygarden.BasicClasses.VecBool;
 import edu.undav.research.tinygarden.BasicClasses.VecInt;
-
 /*
  * Implementation of Tarjan-Read algorithm
  * (generate all the spanning trees of a graph)

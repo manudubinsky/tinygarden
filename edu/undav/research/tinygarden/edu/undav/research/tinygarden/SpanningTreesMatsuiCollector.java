@@ -32,8 +32,8 @@ public class SpanningTreesMatsuiCollector {
 
 	public static class MinMaxCollector extends CollectorBase {
 		
-	 	private int maxCantZeros;
-	 	private int minCantZeros;
+	 	private int maxIntersectionNumber;
+	 	private int minIntersectionNumber;
 	 	private int maxCount;
 	 	private int minCount;
 
@@ -42,24 +42,24 @@ public class SpanningTreesMatsuiCollector {
 		}
 		
 		public void processSpanningTree() {
-			int cantZeros = _stm.getTree().labiCantZeros();
+			int cantZeros = _stm.getTree().intersectionNumber();
 
 			if (_treeCnt == 0) {
-				maxCantZeros = cantZeros;
-				minCantZeros = cantZeros;
+				maxIntersectionNumber = cantZeros;
+				minIntersectionNumber = cantZeros;
 				maxCount = 1;
 				minCount = 1;
 			} else {
-				if (cantZeros > maxCantZeros) {
-					maxCantZeros = cantZeros;
+				if (cantZeros > maxIntersectionNumber) {
+					maxIntersectionNumber = cantZeros;
 					maxCount = 1;
-				} else if (cantZeros == maxCantZeros) {
+				} else if (cantZeros == maxIntersectionNumber) {
 					maxCount++;
 				}
-				if (cantZeros < minCantZeros) {
-					minCantZeros = cantZeros;
+				if (cantZeros < minIntersectionNumber) {
+					minIntersectionNumber = cantZeros;
 					minCount = 1;
-				} else if (cantZeros == minCantZeros) {
+				} else if (cantZeros == minIntersectionNumber) {
 					minCount++;
 				}
 			}
@@ -69,12 +69,13 @@ public class SpanningTreesMatsuiCollector {
 
 		public void postProcess() {
 			Graph g = _stm.getGraph();
-			int Hlen = g.getNumberOfEdges() - g.getNumberOfVertices() + 1;
-			int Hsize = Hlen * Hlen;
-			String line = _fileName + "," + _treeCnt + "," + g.getNumberOfVertices() + "," + 
-							g.getNumberOfEdges() + "," + Hsize + "," + 
-							(Hsize > 0 ? (float)maxCantZeros/(float)Hsize : -1) +
-							"," + maxCantZeros + "(" + maxCount + ")," + minCantZeros + "(" + minCount + ")";
+			String line = _fileName + "," + 
+							_treeCnt + "," + 
+							g.getNumberOfEdges() + "," + 
+							minIntersectionNumber + "," + 
+							minCount + "," +
+							maxIntersectionNumber + "," + 
+							maxCount;
 			if (_log != null) {
 				_log.logLine(line);
 			} else {
@@ -92,6 +93,7 @@ public class SpanningTreesMatsuiCollector {
 	
 	public static class MaxZerosCollector extends CollectorBase {
 	 	private int maxCantZeros;
+		 private int maxCantNotZeros;
 	 	private int maxTreeCount;
 	 	private VecInt maxList;
 
@@ -100,14 +102,15 @@ public class SpanningTreesMatsuiCollector {
 		}
 		
 		public void processSpanningTree() {
-			int cantZeros = _stm.getTree().labiCantZeros();
+			int cantNotZeros = _stm.getTree().intersectionNumber();
 			
-			if (_treeCnt == 0 || cantZeros > maxCantZeros) {
-				maxCantZeros = cantZeros;
+			if (_treeCnt == 0 || cantNotZeros < maxCantNotZeros) {
+				//maxCantZeros = _stm.getTree().labiCantZeros();
+				maxCantNotZeros = cantNotZeros;
 				maxTreeCount = 1;
 				maxList = new VecInt(2);
 				maxList.pushBack(_treeCnt);
-			} else if (cantZeros == maxCantZeros) {
+			} else if (cantNotZeros == maxCantNotZeros) {
 				maxList.pushBack(_treeCnt);
 				maxTreeCount++;
 			}
@@ -117,11 +120,18 @@ public class SpanningTreesMatsuiCollector {
 
 		public void postProcess() {
 			Graph g = _stm.getGraph();
-			String line = "graph: " + _fileName + "," + 
-						"#edges: " + g.getNumberOfEdges() + "," + 
-						"#spanning trees: " + _treeCnt + "," + 
-						"#non-null cycle intersections: " + maxCantZeros + "," +
-						"#spanning trees with min cycle intersections: " + maxTreeCount; //+ "," + maxList.join(",");
+			float n = g.getNumberOfVertices();
+			float m = g.getNumberOfEdges();
+			float mu = m - n  + 1;
+			float lowerBound = ((mu * mu)/(n-1)-mu) / 2;
+			System.out.println((mu * mu));
+			String line = "graph: " + _fileName + "," +  //filename
+						"#edges: " + g.getNumberOfEdges() + "," + //edges 
+						"#spanning trees: " + _treeCnt + "," + //spanning trees
+						"#intersection-number: " + maxCantNotZeros + "," + //intersection number
+						//"#null cycle intersections: " + maxCantZeros + "," +
+						"#spanning trees with min cycle intersections: " + maxTreeCount + "," + //tree with min cycle intersection
+						"lower-bound: " + lowerBound; // lower bound //+ "," + maxList.join(",");
 			if (_log != null) {
 				_log.logLine(line);
 			} else {

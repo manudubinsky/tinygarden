@@ -269,9 +269,25 @@ public class TreeMatsui {
 					cantZeros++;
 			}	
 		}
+		//System.out.println("cantZeros: " + cantZeros);
 		return cantZeros;
 	}
-	
+
+	public int intersectionNumber() {
+		SparseMatrixInt labi = labiMatrix();
+		int cantNotZeros = 0;
+		SparseMatrixInt laplacian = labi.transpose().multiply(labi);
+		//laplacian.toOctave();
+		for (int i = _graph.getNumberOfVertices(); i < _graph.getNumberOfEdges()+1; i++) {
+			for (int j = i+1; j < _graph.getNumberOfEdges()+1; j++) {
+				if (laplacian.get(i,j) != 0)
+					cantNotZeros++;
+			}	
+		}
+		//System.out.println("cantZeros: " + cantZeros);
+		return cantNotZeros;
+	}
+
 	public int diameter() {
 		SparseMatrixInt dist = vertexDistances();
 		int diameter = 0;
