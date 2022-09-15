@@ -1345,6 +1345,14 @@ public class BasicClasses extends BasicClasses_h
 		return index;
 	}
 
+	public int maxDegree() {
+		int max = 0;
+		for (int i = 0; i < _nV; i++) {
+			max = max < _vertexEdges[i].size() ? _vertexEdges[i].size() : max;
+		}
+		return max;
+	}
+
 	public int degree(int iV) {
 		return (0 <= iV && iV < _nV) ? _vertexEdges[iV].size() : -1;
 	}
@@ -1436,7 +1444,18 @@ public class BasicClasses extends BasicClasses_h
 		}
 		return isConnected;
 	}
-	
+
+	public SparseMatrixInt buildIncidenceMatrix() throws Exception {		
+		SparseMatrixInt m = new SparseMatrixInt(_nV);
+		for (int i = 0; i < _nE; i++) {
+			int iV0 = getVertex0(i);
+			int iV1 = getVertex1(i);
+			m.set(iV0, iV1, 1);
+			m.set(iV1, iV0, 1);
+		}
+		return m;
+	}	
+
 	public SparseMatrixInt buildDirectedIncidenceMatrix() throws Exception {		
 		SparseMatrixInt m = new SparseMatrixInt(_nE);
 		for (int i = 0; i < _nE; i++) {
@@ -1470,7 +1489,18 @@ public class BasicClasses extends BasicClasses_h
 			System.out.println(iE + ": " + iV0 + " -> " + iV1);
 		}
 	}
-	
+
+	public void codeDump() {
+		System.out.println("Graph g = new Graph("+getNumberOfVertices()+");");
+		int size = _edges.size();
+		int i = 0;
+		while (i < size) {
+			int iV0 = _edges.get(i++);
+			int iV1 = _edges.get(i++);
+			System.out.println("g.insertEdge("+iV0+", "+iV1+");");
+		}
+	}
+
 	public static Graph buildCompleteGraph(int n) {
 		Graph g = new Graph(n);
 		for (int i = 0; i < n-1; i++) {
@@ -2510,7 +2540,29 @@ coordIndex [
 		  } 			  
 		  return m;
 	  }
-	  
+/*   
+	  $\begin{bmatrix}
+	  0       & C_l       & 0         & 0         & \dots     & \dots     & \dots     & 0         \\
+	  0       & 0         & C_l       & 0         & \dots     & \dots     & \dots     & \vdots    \\
+	  0       & C_r       & 0         & C_l       & \dots     & \dots     & \dots     & \vdots    \\
+	  0       & 0         & C_r       & 0         & \ddots    & \dots     & \dots     & \vdots    \\
+	  \vdots  & \hdots    & \hdots    & \ddots    & \ddots    & \ddots    & \hdots    & \vdots    \\
+	  \vdots  & \hdots    & \hdots    & \hdots    & \ddots    & \ddots    & C_l       & 0         \\
+	  \vdots  & \hdots    & \hdots    & \hdots    & \hdots    & \ddots    & \ddots    & 0         \\
+	  0       & \hdots    & \hdots    & \hdots    & \hdots    & \hdots    & C_r       & 0         \\
+  \end{bmatrix}$
+*/
+	public void latexDump() {
+		System.out.println("$\\begin{bmatrix}");
+		for (int i = 0; i < _rows; i++) {
+			StringBuffer row = new StringBuffer();
+			for (int j = 0; j < getCols(); j++) {
+				row.append(String.format("%1$5d  &", get(i,j)));
+			}
+			System.out.println(row + " \\\\");
+		}
+		System.out.println("\\end{bmatrix}$");
+	}
 	  public void fullDump() {
 		  for (int i = 0; i < _rows; i++) {
 			  StringBuffer row = new StringBuffer();

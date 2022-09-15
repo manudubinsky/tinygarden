@@ -24,6 +24,29 @@ public class SpanningTreesMatsuiProcessor {
 
 	}
 
+	public static class IntersectionNumberProcessor extends ProcessorBase {
+		Item _item;
+		int _intersectionNumber;
+		String _path;
+		
+		public IntersectionNumberProcessor(SpanningTreesMatsui stm, Item item, String path) {
+			super(stm);
+			_item = item;
+			 _intersectionNumber = item.getData().get(0);
+			_path = path;
+			//_list.dump();
+		}
+		
+		public void processSpanningTree() {
+			if (_stm.getTree().intersectionNumber() == _intersectionNumber) {
+				String fileName = _path + _item.fileName() + "." + _treeCnt;
+				_stm.getTree().dumpGraphViz(fileName);
+			}
+			_treeCnt++;
+		}
+
+	}
+
 	public static class TreeListProcessor extends ProcessorBase {
 		Item _item;
 		int _current;

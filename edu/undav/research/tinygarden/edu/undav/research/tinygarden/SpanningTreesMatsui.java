@@ -11,6 +11,7 @@ import edu.undav.research.tinygarden.BasicClasses.Graph;
 import edu.undav.research.tinygarden.BasicClasses.PartitionUnionFind;
 import edu.undav.research.tinygarden.BasicClasses.VecInt;
 import edu.undav.research.tinygarden.SpanningTreesMatsuiCollector.Collector;
+import edu.undav.research.tinygarden.SpanningTreesMatsuiCollector.IntersectionNumberCollector;
 import edu.undav.research.tinygarden.SpanningTreesMatsuiCollector.MaxZerosCollector;
 import edu.undav.research.tinygarden.SpanningTreesMatsuiProcessor.Processor;
 
@@ -163,6 +164,15 @@ public class SpanningTreesMatsui {
 	
 	public void dump() {
 	}
+
+	public static int intersectionNumber(Graph g) throws Exception {
+        SpanningTreesMatsui s;
+        IntersectionNumberCollector collector;
+        s = new SpanningTreesMatsui(g);
+        collector = new IntersectionNumberCollector(s, null, null);
+        s.allSpanningTrees();
+        return collector.getIntersectionNumber();
+    }
 
 	public static class LABILogger {
 		private String _logFile;

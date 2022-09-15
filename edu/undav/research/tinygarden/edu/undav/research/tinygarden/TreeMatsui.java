@@ -183,6 +183,20 @@ public class TreeMatsui {
         }
 	}
 
+	public int maxTreeDegree() {
+		int max = 0;
+		int[] degrees = new int[_graph.getNumberOfVertices()];
+		for (int i = 0; i < _treeEdges.size(); i++) {
+			int iE = _relabelGraph.getGraphIdx(_treeEdges.get(i));
+			degrees[_graph.getVertex0(iE)]++;
+			degrees[_graph.getVertex1(iE)]++;
+		}
+		for (int i = 0; i < degrees.length; i++) {
+			max = max < degrees[i] ? degrees[i] : max;
+		}
+		return max;
+	}
+
 	public SparseMatrixInt labiMatrix() {
 		BFSTreeRelabel bfs = new BFSTreeRelabel(_graph, _treeEdges, _relabelGraph);
 		SparseMatrixInt labi = new SparseMatrixInt(_graph.getNumberOfEdges());

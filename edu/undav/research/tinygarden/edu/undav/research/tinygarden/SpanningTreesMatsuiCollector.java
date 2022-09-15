@@ -67,6 +67,10 @@ public class SpanningTreesMatsuiCollector {
 			_treeCnt++;
 		}
 
+		public int getIntersectionNumber() {
+			return minIntersectionNumber;
+		}
+
 		public void postProcess() {
 			Graph g = _stm.getGraph();
 			String line = _fileName + "," + 
@@ -84,6 +88,36 @@ public class SpanningTreesMatsuiCollector {
 		}
 		
 	}
+
+	public static class IntersectionNumberCollector extends CollectorBase {		
+		private int intersectionNumber;
+
+	   public IntersectionNumberCollector(SpanningTreesMatsui stm, String fileName, LABILogger log) {
+		   super(stm, fileName, log);
+	   }
+	   
+	   public void processSpanningTree() {
+		   int cantZeros = _stm.getTree().intersectionNumber();
+
+		   if (_treeCnt == 0) {
+			   intersectionNumber = cantZeros;
+		   } else {
+				if (cantZeros < intersectionNumber) {
+				   intersectionNumber = cantZeros;
+				}
+		   }
+		   
+		   _treeCnt++;
+	   }
+
+	   public int getIntersectionNumber() {
+		   return intersectionNumber;
+	   }
+
+	   public void postProcess() {
+	   }
+	   
+   }
 
 	/*
 	 * summary for each graph:
@@ -139,6 +173,41 @@ public class SpanningTreesMatsuiCollector {
 			}
 		}		
 	}
+
+	public static class MaxDegreeCollector extends CollectorBase {
+		private int _intersectionNumber;
+		private int degrees;
+
+	   public MaxDegreeCollector(SpanningTreesMatsui stm, String fileName, 
+	   								LABILogger log, int intersectionNumber) {
+		   super(stm, fileName, log);
+		   _intersectionNumber = intersectionNumber;
+		   degrees = 0;
+	   }
+	   
+	   public void processSpanningTree() {
+			if (_stm.getTree().intersectionNumber() == _intersectionNumber) {
+				if (_stm.getTree().maxTreeDegree() == _stm.getGraph().maxDegree()) {
+					degrees++;
+				}
+			}
+		   
+		   _treeCnt++;
+	   }
+
+	   public void postProcess() {
+		   if (_intersectionNumber > 0 && degrees == 0) {
+				String line = "graph: " + _fileName + "," +  //filename
+								"intersection number: " + _intersectionNumber + "," +
+								"#distinct trees: " + degrees;
+				if (_log != null) {
+				_log.logLine(line);
+				} else {
+				System.out.println(line);
+				}
+			}
+	   }		
+   }
 
 	//MaxZerosTrees, spanning trees with best score
 	public static class MaxZerosTrees extends CollectorBase {

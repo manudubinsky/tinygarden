@@ -5,7 +5,12 @@ import edu.undav.research.tinygarden.BasicClasses.VecInt;
 public class Item {
 	String _fileName;
  	VecInt _data;
- 	
+
+	public Item(String fileName, VecInt data) {
+		_fileName = fileName;
+		_data = data;
+	}
+
  	public Item(String line) {
  		String[] fields = line.split(",");
  		_fileName = fields[0];
