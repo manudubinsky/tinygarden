@@ -2,10 +2,21 @@ package edu.undav.research.tinygarden;
 
 import edu.undav.research.tinygarden.BasicClasses.Graph;
 import edu.undav.research.tinygarden.BasicClasses.VecInt;
+import edu.undav.research.tinygarden.SpanningTreesMatsuiCollector.MinMaxCollector;
 import edu.undav.research.tinygarden.SpanningTreesMatsuiProcessor.IntersectionNumberProcessor;
 
 public class AddEdgeConjecture {
 
+/* 
+fName: A849.mat
+Graph g = new Graph(7);
+g.insertEdge(0, 2);
+g.insertEdge(0, 3);
+g.insertEdge(0, 4);
+g.insertEdge(0, 5);
+g.insertEdge(0, 6);
+g.insertEdge(1, 2);
+*/
     /*
      * Graph graph = new Graph(7);
 graph.insertEdge(0, 2);
@@ -62,7 +73,7 @@ graph.insertEdge(5, 6);
  *
  * Esto último puede ser importante para pensar un algoritmo polinomial para el problema
 */
-
+/* 
     public static void main(String[] args) throws Exception {
         Graph g = new Graph(8);
         g.insertEdge(0, 3);
@@ -86,7 +97,6 @@ graph.insertEdge(5, 6);
         g.insertEdge(4, 7);
 
         g.buildIncidenceMatrix().latexDump();
-        /* 
         int intersectionNumber =  intersectionNumber(g);
         VecInt data = new VecInt();
         data.pushBack(intersectionNumber);
@@ -95,13 +105,13 @@ graph.insertEdge(5, 6);
         IntersectionNumberProcessor processor = new IntersectionNumberProcessor(s, item,
                                                         "C:/Users/manud/graph-data/graphviz/deg-8/A10462/g/");
         s.allSpanningTrees();
-        */
     }    
-
+*/
+ 
 /* 
     public static void main(String[] args) throws Exception {
-        String fName = "A10462.mat";
-        int nodeCnt = 8;
+        String fName = "A849.mat";
+        int nodeCnt = 7;
         Graph g = GraphTarjanRead.buildFromAdjMatrix(nodeCnt, 
                                         "C:/Users/manud/graph-data/deg-"+nodeCnt+"/" + fName);
         g.codeDump();
@@ -139,55 +149,151 @@ graph.insertEdge(5, 6);
     }
 
 */
+ 
+/* 
+ * 
+ * 
+46
+44
+44
+44
+44
+45
+45
+45
+45
+44
+A10462.mat: 9
+******
+54
+53
+53
+53
+52
+52
+52
+52
+52
+A10478.mat: 8
+******
+60
+59
+59
+59
+59
+59
+59
+A11104.mat: 6
+******
+69
+68
+68
+66
+66
+66
+A11110.mat: 5
+******
+69
+67
+66
+66
+66
+66
+A11111.mat: 5
+******
+82
+75
+75
+75
+75
+A11113.mat: 4
+******
+*/
 /* 
     public static void main(String[] args) throws Exception {
-        String[] files = {"A4567.mat","A4577.mat","A4578.mat","A4581.mat","A4582.mat","A4584.mat",
-                            "A8796.mat","A9200.mat","A9220.mat","A9498.mat","A9595.mat","A9603.mat",
-                            "A9604.mat","A9607.mat","A9609.mat","A9611.mat","A9612.mat","A9614.mat",
-                            "A9622.mat","A10298.mat","A10300.mat","A10302.mat","A10303.mat","A10324.mat",
-                            "A10333.mat","A10341.mat","A10363.mat","A10369.mat","A10394.mat",
-                            "A10416.mat","A10430.mat","A10432.mat","A10441.mat","A10444.mat",
-                            "A10452.mat","A10453.mat","A10454.mat","A10457.mat","A10458.mat",
-                            "A10462.mat","A10464.mat","A10465.mat","A10466.mat","A10467.mat",
-                            "A10469.mat","A10474.mat","A10476.mat","A10478.mat","A10479.mat",
-                            "A10480.mat","A10482.mat","A10483.mat","A10486.mat","A10487.mat",
-                            "A10806.mat","A10815.mat","A10843.mat","A10877.mat","A10888.mat",
-                            "A10901.mat","A10904.mat","A10910.mat","A10954.mat","A10960.mat",
-                            "A10970.mat","A10977.mat","A10978.mat","A10980.mat","A10984.mat",
-                            "A10985.mat","A10986.mat","A10990.mat","A10992.mat","A11002.mat",
-                            "A11004.mat","A11008.mat","A11015.mat","A11022.mat","A11023.mat",
-                            "A11029.mat","A11031.mat","A11033.mat","A11035.mat","A11040.mat",
-                            "A11043.mat","A11044.mat","A11045.mat","A11048.mat","A11052.mat",
-                            "A11058.mat","A11059.mat","A11060.mat","A11063.mat","A11064.mat",
-                            "A11068.mat","A11069.mat","A11071.mat","A11079.mat","A11080.mat",
-                            "A11081.mat","A11102.mat","A11104.mat","A11109.mat","A11110.mat",
-                            "A11111.mat","A11113.mat"};
+            String[] files = {
+            "A10462.mat",
+            "A10478.mat",
+            "A11104.mat",
+            "A11110.mat",
+            "A11111.mat",
+            "A11113.mat"};
+
         int nodeCnt = 8;
         for (int file = 0; file < files.length; file++) {
             String fName = files[file];
             Graph g = GraphTarjanRead.buildFromAdjMatrix(nodeCnt, 
                                             "C:/Users/manud/graph-data/deg-"+nodeCnt+"/" + fName);
-            int intersectionNumber =  intersectionNumber(g);
+            int intersectionNumber =  SpanningTreesMatsui.intersectionNumber(g);
+            System.out.println(intersectionNumber);
             int nextCnt = 0;
             for (int i = 0; i < g.getNumberOfVertices(); i++) {
                 for (int j = i+1; j < g.getNumberOfVertices(); j++) {
                     if (g.getEdge(i, j) == -1) {
                         Graph g2 = g.clone();
                         g2.insertEdge(i, j);
-                        int intersectionNumber2 =  intersectionNumber(g2);
+                        int intersectionNumber2 =  SpanningTreesMatsui.intersectionNumber(g2);
+                        System.out.println(intersectionNumber2);
                         if (intersectionNumber2 < intersectionNumber) {
-                            if (intersectionNumber - intersectionNumber2 > 1) {
-                                System.out.println("match " + "fName: " + fName + " diff: " + 
-                                                    (intersectionNumber - intersectionNumber2));
-                            }
                             nextCnt++;
                         } 
                     }
                 }
             }
             System.out.println(fName + ": " + nextCnt);
+            System.out.println("******");
         }
     }
+*/
+ 
+    public static void main(String[] args) throws Exception {
+ 
+        String[] files = {
+            "A10462.mat",
+            "A10478.mat",
+            "A11104.mat",
+            "A11110.mat",
+            "A11111.mat",
+            "A11113.mat"};
+
+        int nodeCnt = 8;
+        for (int file = 0; file < files.length; file++) {
+            String fName = files[file];
+            Graph g = GraphTarjanRead.buildFromAdjMatrix(nodeCnt, 
+                                            "C:/Users/manud/graph-data/deg-"+nodeCnt+"/" + fName);
+            SpanningTreesMatsui s = new SpanningTreesMatsui(g);
+            MinMaxCollector collector = new MinMaxCollector(s, null, null);
+            s.allSpanningTrees();
+            collector.postProcess();
+        }
+    }
+
+/* 
+    public static void main(String[] args) throws Exception {
+        String[] files = {
+            "A10462",
+            "A10478",
+            "A11104",
+            "A11110",
+            "A11111",
+            "A11113"};
+
+        int nodeCnt = 8;
+        for (int file = 0; file < files.length; file++) {
+            String fName = files[file];
+            Graph g = GraphTarjanRead.buildFromAdjMatrix(nodeCnt, 
+                                            "C:/Users/manud/graph-data/deg-"+nodeCnt+"/" + fName + ".mat");
+
+            int intersectionNumber =  SpanningTreesMatsui.intersectionNumber(g);
+            VecInt data = new VecInt();
+            data.pushBack(intersectionNumber);
+            Item item = new Item(fName,data);
+            SpanningTreesMatsui s = new SpanningTreesMatsui(g);
+            IntersectionNumberProcessor processor = new IntersectionNumberProcessor(s, item,
+                                                            "C:/Users/manud/graph-data/graphviz/deg-8/"+fName+"/");
+            s.allSpanningTrees();
+        }
+    }    
 */
 
 /* 
@@ -196,25 +302,27 @@ graph.insertEdge(5, 6);
         int total = 11117;
         int graphCount = 0;
         int graphTotal = 0;        
-        for (int graphNum = 4500; graphNum <= total; graphNum++) {
+        for (int graphNum = 1; graphNum <= total; graphNum++) {
             if (graphNum % 50 == 0) {
                 System.out.println(graphNum);
             }
 			String fName = "A" + graphNum + ".mat";
 			Graph g = GraphTarjanRead.buildFromAdjMatrix(nodeCnt, 
-											"C:/Users/manud/graph-data/deg-"+nodeCnt+"/" + fName);
-            if (14 <= g.getNumberOfEdges() && g.getNumberOfEdges() <= 25) {
+										
+            "C:/Users/manud/graph-data/deg-"+nodeCnt+"/" + fName);
+            //if (14 <= g.getNumberOfEdges() && g.getNumberOfEdges() <= 24) {
+            if (g.getNumberOfEdges() < 14) {
                 graphTotal++;
-                int intersectionNumber =  intersectionNumber(g);
-                boolean match = false;
+                int intersectionNumber =  SpanningTreesMatsui.intersectionNumber(g);
+                boolean match = true;
                 for (int i = 0; i < g.getNumberOfVertices(); i++) {
                     for (int j = i+1; j < g.getNumberOfVertices(); j++) {
                         if (g.getEdge(i, j) == -1) {
                             Graph g2 = g.clone();
                             g2.insertEdge(i, j);
-                            int intersectionNumber2 =  intersectionNumber(g2);
-                            if (intersectionNumber2 < intersectionNumber) {
-                                match = true;
+                            int intersectionNumber2 =  SpanningTreesMatsui.intersectionNumber(g2);
+                            if (intersectionNumber2 >= intersectionNumber) {
+                                match = false;
                             } 
                         }
                     }
@@ -229,6 +337,7 @@ graph.insertEdge(5, 6);
         }
         System.out.println("graphCount/total: " + graphCount + " / " + graphTotal);
     }
+
 */
 /*
 Para cada ejemplo: 
@@ -389,29 +498,16 @@ graph.insertEdge(1, 3);
 graph.insertEdge(1, 2);
 graph.insertEdge(3, 5);
 */
-
 /* 
     public static void main(String[] args) throws Exception {
-        Graph graph = new Graph(7);
-        graph.insertEdge(0, 2);
-        graph.insertEdge(0, 3);
-        graph.insertEdge(0, 4);
-        graph.insertEdge(0, 5);
-        graph.insertEdge(0, 6);
-        graph.insertEdge(1, 2);
-        graph.insertEdge(1, 3);
-        graph.insertEdge(1, 4);
-        graph.insertEdge(1, 5);
-        graph.insertEdge(1, 6);
-        graph.insertEdge(2, 4);
-        graph.insertEdge(2, 5);
-        graph.insertEdge(2, 6);
-        graph.insertEdge(3, 4);
-        graph.insertEdge(3, 5);
-        graph.insertEdge(3, 6);
-        graph.insertEdge(4, 6);
-       // graph.insertEdge(5, 6);
-        SpanningTreesMatsui s = new SpanningTreesMatsui(graph);
+        Graph g = new Graph(7);
+        g.insertEdge(0, 2);
+        g.insertEdge(0, 3);
+        g.insertEdge(0, 4);
+        g.insertEdge(0, 5);
+        g.insertEdge(0, 6);
+        g.insertEdge(1, 2);
+        SpanningTreesMatsui s = new SpanningTreesMatsui(g);
         MinMaxCollector collector = new MinMaxCollector(s, null, null);
         s.allSpanningTrees();
         collector.postProcess();

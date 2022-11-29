@@ -197,9 +197,11 @@ public class SpanningTreesMatsuiCollector {
 
 	   public void postProcess() {
 		   if (_intersectionNumber > 0 && degrees == 0) {
-				String line = "graph: " + _fileName + "," +  //filename
+/* 				String line = "graph: " + _fileName + "," +  //filename
 								"intersection number: " + _intersectionNumber + "," +
 								"#distinct trees: " + degrees;
+*/
+				String line = _fileName;
 				if (_log != null) {
 				_log.logLine(line);
 				} else {
